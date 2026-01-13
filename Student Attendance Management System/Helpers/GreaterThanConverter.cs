@@ -12,7 +12,7 @@ namespace Student_Attendance_Management_System.Helpers
             if (value == null) return false;
             if (double.TryParse(value.ToString(), out double rate))
             {
-                return rate <= 75.0;
+                return rate < 75.0;
             }
             return false;
         }
