@@ -68,12 +68,6 @@ namespace Student_Attendance_Management_System.ViewModel
         [ObservableProperty]
         private string _search;
 
-        public RecordViewModel()
-        {
-        }
-
-
-
         [RelayCommand]
         public async Task LoadAcademicYears()
         {
@@ -389,6 +383,30 @@ namespace Student_Attendance_Management_System.ViewModel
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error at Email Sending in Vm: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        [RelayCommand]
+        public async Task SendSpecificEmail(StudentModified student)
+        {
+            if(IsBusy) return;
+            try
+            {
+                Debug.WriteLine($"Student id: {student._id}");
+                IsBusy = true;
+                string studentId = student._id;
+
+                var response = await RecordAuthService.SendSpecificEmailAsync(studentId);
+                if (response?.success == true) 
+                {
+                    await Shell.Current.DisplayAlert("Message", response.message.Trim(), "Ok");
+                }
+            }catch(Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", ex.Message.ToString(), "Ok");
             }
             finally
             {

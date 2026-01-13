@@ -24,7 +24,7 @@ namespace Student_Attendance_Management_System
 
             if (!string.IsNullOrEmpty(token))
             {
-                Debug.WriteLine("TOKEN FOUND");
+                Debug.WriteLine($"TOKEN FOUND: {token}");
                 if (Application.Current is App app)
                 {
                     app.NavigateMainPage();

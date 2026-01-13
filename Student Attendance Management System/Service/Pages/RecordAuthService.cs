@@ -170,5 +170,43 @@ namespace Student_Attendance_Management_System.Service.Pages
                 return null;
             }
         }
+
+        public static async Task<SpecificEmailResponse> SendSpecificEmailAsync(string studentId)
+        {
+            try
+            {
+                string url = $"/admin/students/{studentId}/email";
+                var response = await ApiService.SendAsync(
+                    HttpMethod.Get,
+                    url,
+                    null,
+                    true
+                    );
+                if (!response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"Error At Sending email {response.Content.ReadAsStringAsync()}");
+                    return new SpecificEmailResponse
+                    {
+                        success = false,
+                        message = response.StatusCode.ToString()
+                    };
+                }
+                var json = await response.Content.ReadAsStringAsync();
+                var data = JsonSerializer.Deserialize<SpecificEmailResponse>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return data;
+            }catch(Exception ex)
+            {
+                Debug.WriteLine($"Error At Sending a specific email {ex.Message}");
+                return new SpecificEmailResponse
+                {
+                    success = false,
+                    message = ex.Message,
+                };
+            }
+        }
     }
 }

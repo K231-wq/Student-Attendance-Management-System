@@ -101,7 +101,7 @@
                                         CommandParameter="{Binding .}"
                                         />
                                 </Frame.GestureRecognizers>
-                                <Grid ColumnDefinitions="110, *, 100, 80" 
+                                <Grid ColumnDefinitions="110, *, 80, 100, 80" 
                                       Padding="0">
                                     <!-- Student's Image -->
                                     <Image Aspect="AspectFill" 
@@ -123,11 +123,27 @@
                                                FontSize="10" 
                                                TextColor="WhiteSmoke"/>
                                     </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="2" 
+                                    <!--Single Email Send Buttton using boolean converter-->
+                                    <VerticalStackLayout Grid.Column="2"
+                                                         VerticalOptions="Center"
+                                                         HorizontalOptions="Center">
+                                        <Border Stroke="White"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 10">
+                                            <Button Text="Email"
+                                                    IsVisible="{Binding attendanceRate, Converter={StaticResource GreaterThanConverter}}"
+                                                    BackgroundColor="{StaticResource BrandRed}"
+                                                    FontSize="12"
+                                                    TextColor="{StaticResource White}"
+                                                    FontAttributes="Bold"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:RecordViewModel}}, Path=SendSpecificEmailCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    <!--Attendance Rate using boolConverter from Helpers function  -->
+                                    <VerticalStackLayout Grid.Column="3" 
                                                          VerticalOptions="Center" 
                                                          HorizontalOptions="Center">
-                                        <!--Attendance Rate using boolConverter from Helpers function  -->
                                         <Border WidthRequest="55" 
                                                 HeightRequest="55" 
                                                 StrokeThickness="3" 
@@ -153,7 +169,7 @@
                                         <Label Text="Attendance" FontSize="10" HorizontalOptions="Center" Margin="0,4,0,0"/>
                                     </VerticalStackLayout>
                                     <!-- Update && Delete Button-->
-                                    <VerticalStackLayout Grid.Column="3" 
+                                    <VerticalStackLayout Grid.Column="4" 
                                                          Spacing="6" 
                                                          VerticalOptions="Center" 
                                                          Padding="0,0,10,0">
