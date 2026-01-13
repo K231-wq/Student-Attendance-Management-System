@@ -397,9 +397,11 @@ namespace Student_Attendance_Management_System.ViewModel
             {
                 Debug.WriteLine($"Student id: {student._id}");
                 IsBusy = true;
-                string studentId = student._id;
 
-                var response = await RecordAuthService.SendSpecificEmailAsync(studentId);
+                string studentId = student._id;
+                string percentage = student.attendanceRate;
+
+                var response = await RecordAuthService.SendSpecificEmailAsync(studentId, percentage);
                 if (response?.success == true) 
                 {
                     await Shell.Current.DisplayAlert("Message", response.message.Trim(), "Ok");

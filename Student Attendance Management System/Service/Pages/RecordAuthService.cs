@@ -171,11 +171,11 @@ namespace Student_Attendance_Management_System.Service.Pages
             }
         }
 
-        public static async Task<SpecificEmailResponse> SendSpecificEmailAsync(string studentId)
+        public static async Task<SpecificEmailResponse> SendSpecificEmailAsync(string studentId, string percentage)
         {
             try
             {
-                string url = $"/admin/students/{studentId}/email";
+                string url = $"/admin/students/{studentId}/email?percentage={percentage}";
                 var response = await ApiService.SendAsync(
                     HttpMethod.Get,
                     url,
