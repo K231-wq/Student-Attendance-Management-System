@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.pages.DetailsPage"
+             xmlns:modelResponses="clr-namespace:Student_Attendance_Management_System.Model.Responses"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             xmlns:helpers="clr-namespace:Student_Attendance_Management_System.Helpers"
+             x:DataType="viewModel:DetailsStudentViewModel"
+             Title="{Binding Student.name}"
+             BackgroundColor="{StaticResource PrimaryDarkText}"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:StatusToColorConverter x:Key="StatusToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+        <BoxView Grid.Row="0" HeightRequest="230" Color="{StaticResource Primary}" VerticalOptions="Start"/>
+
+        <VerticalStackLayout Grid.Row="0" Padding="0,30,0,0" Spacing="5" HorizontalOptions="Center">
+            <Border StrokeShape="RoundRectangle 60" HeightRequest="110" WidthRequest="110" StrokeThickness="3" Stroke="White">
+                <Image Source="{Binding Student.FullProfileImageUrl}" Aspect="AspectFill"/>
+            </Border>
+            <Label Text="{Binding Student.name}" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+            <Label Text="{Binding Student.uid}" FontSize="12" TextColor="#D1D1D6" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <RefreshView Grid.Row="1" Margin="0,-30,0,0" IsRefreshing="{Binding IsBusy}" Command="{Binding LoadStudentRecordsCommand}">
+            <CollectionView ItemsSource="{Binding StudentRecords}">
+
+                <CollectionView.Header>
+                    <VerticalStackLayout Padding="20,10" Spacing="20">
+
+                        <Border StrokeShape="RoundRectangle 16" BackgroundColor="White" Padding="24" StrokeThickness="0">
+                            <Border.Shadow>
+                                <Shadow Brush="Black" Offset="0,10" Opacity="0.1" Radius="20"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="*, *, *" RowDefinitions="Auto, Auto">
+                                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                                    <Label Text="{Binding StudentRecordsResponse.stats.percentage}" 
+                                       FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center"/>
+                                    <Label Text="ATTENDANCE" FontSize="10" FontAttributes="Bold" TextColor="#8E8E93"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                    <Label Text="{Binding StudentRecordsResponse.stats.present}" 
+                                       FontSize="20" FontAttributes="Bold" TextColor="#27AE60" HorizontalTextAlignment="Center"/>
+                                    <Label Text="PRESENT" FontSize="10" FontAttributes="Bold" TextColor="#8E8E93"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                                    <Label Text="{Binding StudentRecordsResponse.stats.absent}" 
+                                       FontSize="20" FontAttributes="Bold" TextColor="#E74C3C" HorizontalTextAlignment="Center"/>
+                                    <Label Text="ABSENT" FontSize="10" FontAttributes="Bold" TextColor="#8E8E93"/>
+                                </VerticalStackLayout>
+
+                                <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" Color="#F2F2F7" Margin="0,20"/>
+
+                                <Grid Grid.Row="2" Grid.ColumnSpan="3" ColumnDefinitions="*, *" Margin="0, 20">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="DEPARTMENT" FontSize="10" FontAttributes="Bold" TextColor="#AEAEB2"/>
+                                        <Label Text="{Binding Student.major.name}" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="Black"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="End">
+                                        <Label Text="REGISTRATION" FontSize="10" FontAttributes="Bold" TextColor="#AEAEB2" HorizontalTextAlignment="End"/>
+                                        <Label Text="{Binding Student.createAt}" FontSize="12" TextColor="Black"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <Label Text="Attendance History" FontSize="20" FontAttributes="Bold" Margin="0,10,0,0" TextColor="{StaticResource Gray200}"/>
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="modelResponses:Records">
+                        <Grid Padding="20,8">
+                            <Border StrokeShape="RoundRectangle 12" Padding="16" BackgroundColor="White" StrokeThickness="0">
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15">
+                                    <Border Grid.Column="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 8" WidthRequest="60" HeightRequest="60">
+                                        <Label Text="{Binding session.date}" FontSize="12" FontAttributes="Bold" 
+                                           TextColor="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding session.subject}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource DarkText}"/>
+                                        <Label Text="{Binding session.teacher}" FontSize="13" TextColor="#8E8E93"/>
+                                        <Label Text="{Binding session.subjectCode}" FontSize="11" TextColor="{StaticResource Primary}"/>
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="2" VerticalOptions="Center" Padding="12,6" StrokeShape="RoundRectangle 20"
+                                        BackgroundColor="{Binding status, Converter={StaticResource StatusToColorConverter}}" StrokeThickness="0">
+                                        <Label Text="{Binding status}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

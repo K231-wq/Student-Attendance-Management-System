@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.pages.ProfilePage"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             xmlns:model="clr-namespace:Student_Attendance_Management_System.Model"
+             xmlns:converters="clr-namespace:Student_Attendance_Management_System.Converters"
+             x:DataType="viewModel:UpdateTeacherViewModel"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntToBoolConverter x:Key="IntToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*'}" BackgroundColor="{StaticResource Navy1}">
+        <ScrollView>
+            <VerticalStackLayout Padding="40" Spacing="4" VerticalOptions="Center">
+
+                <Button Text="Cancel" Command="{Binding GoBackCommand}" 
+                            HorizontalOptions="Start" BackgroundColor="Transparent" TextColor="White" Margin="0,0,0,10"
+                            IsVisible="{OnIdiom Phone=True, Tablet=False, Desktop=False}"/>
+
+                <Label Text="Update Profile" FontSize="23" HorizontalOptions="Center"
+                           FontAttributes="Bold" TextColor="White" Margin="0,0,0,10" />
+
+                <Label Text="Username" TextColor="White" FontAttributes="Bold" />
+                <Entry Placeholder="Enter username" Text="{Binding UserName}" TextColor="White" />
+
+                <Label Text="Email" TextColor="White" FontAttributes="Bold" />
+                <Entry Placeholder="Enter email" Text="{Binding Email}" TextColor="White" />
+
+                <Label Text="Majors" TextColor="White" FontAttributes="Bold" Margin="0,10,0,0"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label Text="Current Major: " TextColor="White" VerticalOptions="Center" Margin="0, 0, 10, 0" />
+                    <Picker ItemsSource="{Binding Majors}"
+                                SelectedItem="{Binding SelectedMajor}"
+                                ItemDisplayBinding="{Binding name}" 
+                                TextColor="White" BackgroundColor="Black"
+                                WidthRequest="200" HeightRequest="40" />
+                </HorizontalStackLayout>
+
+                <Label Text="Changing major will reset subject selection." 
+                           TextColor="#FFDDDD" FontSize="11" FontAttributes="Italic" HorizontalOptions="Center" />
+
+                <Label Text="Add Subjects" TextColor="White" FontAttributes="Bold" Margin="0,10,0,0" />
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                    <Picker Grid.Column="0" Title="Select Subject"
+                                ItemsSource="{Binding AvailableSubjects}"
+                                SelectedItem="{Binding CurrentSubjectPickerSelection}"
+                                ItemDisplayBinding="{Binding name}" 
+                                TextColor="White" BackgroundColor="Black" />
+                    <Button Grid.Column="1" Text="Add" Command="{Binding AddSubjectToListCommand}" />
+                </Grid>
+
+                <Label Text="Your Subjects:" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0"
+                           IsVisible="{Binding SelectedSubjectsList.Count, Converter={StaticResource IntToBoolConverter}}" />
+
+                <CollectionView ItemsSource="{Binding SelectedSubjectsList}" HeightRequest="150">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Subject">
+                            <Grid ColumnDefinitions="*, Auto" Padding="5">
+                                <Label Text="{Binding name}" VerticalOptions="Center" TextColor="White" FontAttributes="Bold" />
+                                <Button Grid.Column="1" 
+                                    Text="Remove" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:UpdateTeacherViewModel}}, Path=RemoveSubjectFromListCommand}"
+                                    CommandParameter="{Binding .}"
+                                    TextColor="White" 
+                                    BackgroundColor="#FF4444" 
+                                    HeightRequest="35" 
+                                    FontSize="12" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="{Binding ErrorMessage}" TextColor="Red" HorizontalOptions="Center" IsVisible="{Binding HasError}" />
+
+                <Button Command="{Binding UpdateProfileCommand}"
+                            Text="SAVE CHANGES"
+                            BackgroundColor="#28a745"
+                            TextColor="White"
+                            HeightRequest="50"
+                            CornerRadius="6"
+                            Margin="0,20,0,0" />
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

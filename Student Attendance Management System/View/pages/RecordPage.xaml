@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.pages.RecordPage"
+             xmlns:model="clr-namespace:Student_Attendance_Management_System.Model"
+             xmlns:modelResponse="clr-namespace:Student_Attendance_Management_System.Model.Responses"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             x:DataType="viewModel:RecordViewModel"
+             >
+    <Grid RowDefinitions="60, *, Auto" 
+          RowSpacing="0">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="Auto, *, Auto, Auto" 
+              Padding="10,0" 
+              BackgroundColor="{StaticResource PrimaryBlue}" 
+              VerticalOptions="Fill">
+
+            <!--Total Student-->
+            <HorizontalStackLayout Spacing="8" 
+                                   VerticalOptions="Center">
+                <Label Text="Total Students:" 
+                       TextColor="White" 
+                       FontSize="13" 
+                       VerticalOptions="Center"/>
+                <Border StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#33FFFFFF" 
+                        Padding="8,2">
+                    <Label Text="{Binding TotalStudents}" 
+                           TextColor="White" 
+                           FontAttributes="Bold" 
+                           FontSize="14"/>
+                </Border>
+            </HorizontalStackLayout>
+            <!-- Search Bar -->
+            <Border Grid.Column="1" 
+                    Margin="10,8" 
+                    StrokeShape="RoundRectangle 8" 
+                    StrokeThickness="0" 
+                    BackgroundColor="White">
+                <Grid ColumnDefinitions="*, Auto">
+                    <Entry Text="{Binding Search}" 
+                           Placeholder="Search..." 
+                           FontSize="13" 
+                           TextColor="Black" 
+                           PlaceholderColor="Gray" 
+                           Margin="10,0"/>
+                    <Button Grid.Column="1" 
+                            Text="Search" 
+                            Command="{Binding SearchStudentsCommand}"
+                            BackgroundColor="{StaticResource BrandGreen}" 
+                            HeightRequest="34" 
+                            Margin="2" 
+                            CornerRadius="6" 
+                            FontSize="12" 
+                            FontAttributes="Bold" 
+                            TextColor="White"/>
+                </Grid>
+            </Border>
+            <!-- Bulk Email && Academic Year select -->
+            <Button Grid.Column="2" 
+                    Text="Bulk Email" 
+                    Command="{Binding BulkEmailSendingCommand}"
+                    BackgroundColor="Red" 
+                    HeightRequest="36" 
+                    FontSize="11" 
+                    Margin="5,0" 
+                    TextColor="White" 
+                    FontAttributes="Bold"/>
+
+            <Picker Grid.Column="3" 
+                    ItemsSource="{Binding AcademicYears}" 
+                    SelectedItem="{Binding SelectedAcademicYear}"
+                    ItemDisplayBinding="{Binding label}" 
+                    TextColor="White" 
+                    Title="Academic Year"
+                    FontSize="12" 
+                    WidthRequest="100" 
+                    VerticalOptions="Center"/>
+        </Grid>
+        <!-- Student's Data Template -->
+        <RefreshView Grid.Row="1" 
+                     IsRefreshing="{Binding IsBusy}" 
+                     Command="{Binding LoadAllStudentsCommand}" 
+                     IsVisible="{Binding IsNotBusy}" 
+                     BackgroundColor="{StaticResource Navy1}"
+                     >
+            <CollectionView ItemsSource="{Binding Students}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="modelResponse:StudentModified">
+                        <Grid Padding="10,5">
+                            <Frame Style="{StaticResource CardView}" 
+                                   Padding="0" 
+                                   HasShadow="True" 
+                                   HeightRequest="110">
+                                <!--Go to DetailPage-->
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:RecordViewModel}}, Path=GoToDetailsStudentCommand}"
+                                        CommandParameter="{Binding .}"
+                                        />
+                                </Frame.GestureRecognizers>
+                                <Grid ColumnDefinitions="110, *, 100, 80" 
+                                      Padding="0">
+                                    <!-- Student's Image -->
+                                    <Image Aspect="AspectFill" 
+                                           Source="{Binding FullProfileImageUrl}" 
+                                           />
+                                    <!-- Student's Data Details-->
+                                    <VerticalStackLayout Grid.Column="1" 
+                                                         VerticalOptions="Center" 
+                                                         Padding="12,0" Spacing="4">
+                                        <Label Text="{Binding name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               MaxLines="1" 
+                                               TextColor="White"/>
+                                        <Label Text="{Binding email}" 
+                                               FontSize="12" 
+                                               TextColor="{StaticResource White}"/>
+                                        <Label Text="{Binding uid}" 
+                                               FontSize="10" 
+                                               TextColor="WhiteSmoke"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2" 
+                                                         VerticalOptions="Center" 
+                                                         HorizontalOptions="Center">
+                                        <!--Attendance Rate using boolConverter from Helpers function  -->
+                                        <Border WidthRequest="55" 
+                                                HeightRequest="55" 
+                                                StrokeThickness="3" 
+                                                StrokeShape="RoundRectangle 27"
+                                                >
+                                            <Border.Triggers>
+                                                <DataTrigger TargetType="Border" 
+                                                             Binding="{Binding attendanceRate, Converter={StaticResource ThresholdConverter}}" Value="True">
+                                                    <Setter Property="Stroke" Value="Green" />
+                                                    <Setter Property="Background" Value="#1A00FF00" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Border" 
+                                                             Binding="{Binding attendanceRate, Converter={StaticResource ThresholdConverter}}" Value="False">
+                                                    <Setter Property="Stroke" Value="Red" />
+                                                    <Setter Property="Background" Value="#1AFF0000" />
+                                                </DataTrigger>
+                                            </Border.Triggers>
+
+                                            <Label Text="{Binding attendanceRate, StringFormat='{0}%'}" 
+                                                   VerticalOptions="Center" HorizontalOptions="Center" 
+                                                   FontSize="12" FontAttributes="Bold" TextColor="White"/>
+                                        </Border>
+                                        <Label Text="Attendance" FontSize="10" HorizontalOptions="Center" Margin="0,4,0,0"/>
+                                    </VerticalStackLayout>
+                                    <!-- Update && Delete Button-->
+                                    <VerticalStackLayout Grid.Column="3" 
+                                                         Spacing="6" 
+                                                         VerticalOptions="Center" 
+                                                         Padding="0,0,10,0">
+                                        <Button Text="Update" 
+                                                FontSize="10" 
+                                                HeightRequest="35" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:RecordViewModel}}, Path=GoToEditPageCommand}" 
+                                                CommandParameter="{Binding .}" />
+                                        <Button Text="Delete" 
+                                                FontSize="10" 
+                                                HeightRequest="35" 
+                                                BackgroundColor="Red" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:RecordViewModel}}, Path=DeleteStudentCommand}" 
+                                                CommandParameter="{Binding .}" 
+                                                />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        <ActivityIndicator 
+            ZIndex="1"
+            IsVisible="{Binding IsBusy}"
+            IsRunning="{Binding IsBusy}"
+            HorizontalOptions="Fill"
+            VerticalOptions="Center"
+            Color="{StaticResource Primary}"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+        />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.pages.QRScanPage"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             x:DataType="viewModel:QRViewModel"
+             Title="QR Generate Page">
+    <VerticalStackLayout BackgroundColor="{StaticResource Navy1}">
+
+        <StackLayout
+            Orientation="Vertical"
+            HorizontalOptions="Center"
+            Padding="4"
+            Spacing="15"
+            IsVisible="{Binding IsNotBusy}"
+            >
+            <Label Text="Select Course"
+               FontSize="18"
+               FontAttributes="Bold" />
+
+            <!-- Course Picker -->
+            <Picker Title="Choose a course"
+                ItemsSource="{Binding Courses}"
+                SelectedItem="{Binding SelectedCourse}" 
+                BackgroundColor="{StaticResource Gray900}"/>
+
+            <!-- Generate Button -->
+            <Button Text="Generate QR Code"
+                Command="{Binding GenerateQrCommand}" />
+
+            <Border 
+                HeightRequest="320" 
+                WidthRequest="320" 
+                StrokeShape="RoundRectangle 5" 
+                BackgroundColor="White" 
+                HorizontalOptions="Center" 
+                Margin="0, 2, 0, 0" 
+                Padding="0" 
+                >
+                <zxing:BarcodeGeneratorView
+                    Value="{Binding QrValue}"
+                    Format="QrCode"
+                    IsVisible="{Binding IsQrVisible}"
+                    Scale="1.15"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill" 
+                    />
+            </Border>
+        </StackLayout>
+
+        <ActivityIndicator
+            IsVisible="{Binding IsBusy}"
+            IsRunning="{Binding IsBusy}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Color="{StaticResource Primary}"
+            />
+
+    </VerticalStackLayout>
+</ContentPage>

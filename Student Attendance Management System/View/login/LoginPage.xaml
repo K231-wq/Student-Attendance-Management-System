@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.login.LoginPage"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             x:DataType="viewModel:LoginViewModel"
+             BackgroundColor="White"
+             >
+    <Grid ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*,*'}">
+
+        <!-- LEFT PANEL -->
+        <Grid Grid.Column="0"
+              BackgroundColor="White"
+              Padding="40">
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Spacing="15"
+                >
+
+                <Image
+                    Source="logo.png"
+                    WidthRequest="140"
+                    HeightRequest="140" />
+
+                <Label
+                    Text="Easy Attend"
+                    FontSize="32"
+                    FontAttributes="Bold"
+                    TextColor="{StaticResource PrimaryBlue}"
+                    HorizontalTextAlignment="Center" />
+
+                <Label
+                    Text="Designing a Student Attendance Management System Using Client-Server Architecture"
+                    FontSize="14"
+                    TextColor="Black"
+                    HorizontalTextAlignment="Center"
+                    WidthRequest="320" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- RIGHT PANEL -->
+        <Grid Grid.Column="{OnIdiom Phone=0, Tablet=1, Desktop=1}">
+
+            <!-- Blue Background with Angle -->
+            <Grid IsVisible="{OnIdiom Phone=False, Tablet=True, Desktop=True}">
+                <Path
+                    Fill="{StaticResource PrimaryBlue}"
+                    Data="M 40 -1 L 1000 0 L 1000 1000 L 0 1000 Z" />
+            </Grid>
+
+            <!-- LOGIN FORM -->
+            <ScrollView>
+                <VerticalStackLayout
+                    Padding="80"
+                    Spacing="6"
+                    VerticalOptions="Center">
+                    <Label
+                        Text="Email"
+                        TextColor="Black"
+                        FontSize="14" />
+
+                    <Entry
+                        Placeholder="Enter your email"
+                        Text="{Binding Email}"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        HeightRequest="40" />
+
+                    <Label
+                        Text="Password"
+                        TextColor="Black"
+                        FontSize="14" />
+
+                    <Entry
+                        Placeholder="Enter your password"
+                        Text="{Binding Password}"
+                        IsPassword="True"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        HeightRequest="40" />
+
+                    <Label
+                        Text="{Binding ErrorMessage}"
+                        TextColor="Red"
+                        IsVisible="{Binding HasError}" />
+
+                    <ActivityIndicator IsVisible="{Binding IsBusy}"
+                        IsRunning="{Binding IsBusy}"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        Color="{StaticResource Primary}"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        />
+
+                    <!-- Remember + Forgot -->
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox Color="White" />
+                            <Label
+                                Text="Remember me"
+                                TextColor="White"
+                                VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="Forgot your password?"
+                            TextColor="White"
+                            TextDecorations="Underline"
+                            VerticalTextAlignment="Center" />
+                    </Grid>
+
+                    <!-- Signup -->
+                    <HorizontalStackLayout
+                        Margin="0, 40, 0, 0"
+                        HorizontalOptions="Center"
+                        Spacing="5"
+                        IsVisible="{OnIdiom Desktop=true, Phone=false, Tablet=false}"
+                        >
+
+                        <Label
+                            Text="Don't Have An Account?"
+                            TextColor="White" />
+
+                        <Label
+                            Text="Sign Up"
+                            FontAttributes="Bold"
+                            TextDecorations="Underline"
+                            TextColor="White" >
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding GoToRegisterCommand}" 
+                                    />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    <!-- SIGN IN BUTTON -->
+                    <Button
+                        Command="{Binding TeacherLoginCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Text="SIGN IN"
+                        HeightRequest="50"
+                        CornerRadius="6"
+                        BackgroundColor="#4A6CF7"
+                        TextColor="White"
+                        FontAttributes="Bold" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+    </Grid>
+</ContentPage>

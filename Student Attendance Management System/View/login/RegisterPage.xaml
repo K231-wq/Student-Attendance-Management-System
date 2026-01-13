@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.login.RegisterPage"
+             xmlns:model="clr-namespace:Student_Attendance_Management_System.Model"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             xmlns:converters="clr-namespace:Student_Attendance_Management_System.Converters"
+             x:DataType="viewModel:RegisterViewModel"
+             BackgroundColor="White"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntToBoolConverter x:Key="IntToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*,*'}">
+
+        <!-- LEFT PANEL -->
+        <Grid Grid.Column="0"
+              BackgroundColor="White"
+              Padding="40">
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Spacing="15"
+                IsVisible="{OnIdiom Phone=False, Tablet=True, Desktop=True}"
+                >
+
+                <Image
+                    Source="logo.png"
+                    WidthRequest="140"
+                    HeightRequest="140" />
+
+                <Label
+                    Text="Easy Attend"
+                    FontSize="32"
+                    FontAttributes="Bold"
+                    TextColor="{StaticResource PrimaryBlue}"
+                    HorizontalTextAlignment="Center" />
+
+                <Label
+                    Text="Designing a Student Attendance Management System Using Client-Server Architecture"
+                    FontSize="14"
+                    TextColor="Black"
+                    HorizontalTextAlignment="Center"
+                    WidthRequest="320" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- RIGHT PANEL -->
+        <Grid Grid.Column="{OnIdiom Phone=0, Tablet=1, Desktop=1}">
+            <Grid IsVisible="{OnIdiom Phone=False, Tablet=True, Desktop=True}">
+                <Path
+                    Fill="{StaticResource PrimaryBlue}"
+                    Data="M 40 -1 L 1000 0 L 1000 1000 L 0 1000 Z" />
+            </Grid>
+            <ScrollView>
+                <VerticalStackLayout Padding="40" Spacing="4" VerticalOptions="Center">
+                    <Label 
+                        Text="Create Teacher Account" 
+                        FontSize="23" 
+                        HorizontalOptions="Center"
+                        FontAttributes="Bold" 
+                        TextColor="White" 
+                        Margin="0,0,0,10"
+                        />
+
+                    <Label 
+                        Text="Username" 
+                        TextColor="White" 
+                        FontAttributes="Bold"
+                        />
+                    <Entry 
+                        Placeholder="Enter username" 
+                        Text="{Binding Username}" 
+                        TextColor="White"
+                        />
+
+                    <Label Text="Email" 
+                           TextColor="White" 
+                           FontAttributes="Bold"
+                           />
+                    <Entry 
+                        Placeholder="Enter email" 
+                        Text="{Binding Email}" 
+                        TextColor="White"
+                        />
+
+                    <Label Text="Password" 
+                           TextColor="White" 
+                           FontAttributes="Bold"
+                           />
+                    <Entry 
+                        Placeholder="Enter password" 
+                        Text="{Binding Password}" 
+                        IsPassword="True" 
+                        />
+                    <Label 
+                        Text="Majors" 
+                        TextColor="White" 
+                        FontAttributes="Bold"
+                        />
+                    <HorizontalStackLayout
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        >
+                        <Label 
+                            Text="Select Major: " 
+                            TextColor="White" 
+                            Margin="0, 10, 10, 0"
+                            />
+                        <Picker
+                            ItemsSource="{Binding Majors}"
+                            SelectedItem="{Binding SelectedMajor}"
+                            ItemDisplayBinding="{Binding name}" 
+                            TextColor="White"
+                            BackgroundColor="Black"
+                            Margin="0,0,0,10"
+                            WidthRequest="280"
+                            HeightRequest="40"
+                            />
+                    </HorizontalStackLayout>
+
+
+                    <Label 
+                        Text="Subjects" 
+                        TextColor="White" 
+                        FontAttributes="Bold"
+                        />
+                    <Grid 
+                        ColumnDefinitions="*, Auto" 
+                        ColumnSpacing="10"
+                        >
+                        <Picker Grid.Column="0"
+                                Title="Select Subject"
+                                ItemsSource="{Binding AvailableSubjects}"
+                                SelectedItem="{Binding CurrentSubjectPickerSelection}"
+                                ItemDisplayBinding="{Binding name}" 
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                />
+                        <Button 
+                            Grid.Column="1" 
+                            Text="Add" 
+                            Command="{Binding AddSubjectToListCommand}" 
+                            />
+                    </Grid>
+
+                    <Label 
+                        Text="Selected Subjects:" 
+                        FontAttributes="Bold"
+                        IsVisible="{Binding SelectedSubjectsList.Count, Converter={StaticResource IntToBoolConverter}}" 
+                        />
+
+                    <CollectionView
+                        ItemsSource="{Binding SelectedSubjectsList}" 
+                        HeightRequest="120"
+                        >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Subject">
+                                <Grid ColumnDefinitions="*, Auto" Padding="5">
+                                    <Label Text="{Binding name}" 
+                                           VerticalOptions="Center" 
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           />
+
+                                    <Button Grid.Column="1" 
+                                            Text="Remove" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:RegisterViewModel}}, Path=RemoveSubjectFromListCommand}"
+                                            CommandParameter="{Binding .}"
+                                            TextColor="White"
+                                            FontAttributes="Bold"
+                                            BackgroundColor="Red" 
+                                            />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label 
+                        Text="{Binding ErrorMessage}" 
+                        TextColor="Red" 
+                        HorizontalOptions="Center" 
+                        IsVisible="{Binding HasError}" 
+                        />
+
+                    <Button 
+                        Command="{Binding SignUpCommand}" 
+                        Text="SIGN UP" 
+                        BackgroundColor="#4A6CF7" 
+                        TextColor="White" 
+                        HeightRequest="50" 
+                        CornerRadius="6" />
+
+                    <HorizontalStackLayout 
+                        HorizontalOptions="Center" 
+                        Spacing="5"
+                        >
+                        <Label 
+                            Text="Already have an account?" 
+                            TextColor="{StaticResource Gray100}" 
+                            FontAttributes="Italic"
+                            />
+                        <Label 
+                            Text="Login Page" 
+                            TextColor="{StaticResource White}" 
+                            FontAttributes="Bold" 
+                            TextDecorations="Underline"
+                            >
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GoToLoginCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+    </Grid>
+</ContentPage>

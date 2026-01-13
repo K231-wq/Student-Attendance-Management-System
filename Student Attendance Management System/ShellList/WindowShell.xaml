@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Student_Attendance_Management_System.ShellList.WindowShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Student_Attendance_Management_System.View.pages"
+    FlyoutBackgroundColor="{StaticResource DarkText}"
+    FlyoutBehavior="Locked"
+    FlyoutWidth="220"
+    Title="Attendance Management System"
+    >
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="45" BackgroundColor="Transparent">
+        </Grid>
+    </Shell.FlyoutHeader>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Style="{StaticResource FlyoutItemLayoutStyle}" 
+              HeightRequest="45" 
+              HorizontalOptions="Fill"
+              ColumnDefinitions="50, *">
+
+                <Image Source="{Binding Icon}"
+                   Margin="15,0,0,0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   HeightRequest="20"
+                   WidthRequest="20" />
+
+                <Label Grid.Column="1"
+                   Text="{Binding Title}"
+                   TextColor="White"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   Margin="10,0,0,0" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <FlyoutItem
+        Title="Home"
+        Icon="home.png"
+        >
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:HomePage}" 
+            />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Record"
+        Icon="edit.png"
+        >
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:RecordPage}" 
+            Route="RecordPage"
+            />
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="QrScan"
+        Icon="qr.png"
+        >
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:QRScanPage}" 
+            />
+    </FlyoutItem>
+
+    <!-- Windows usage with onPlatform-->
+    <FlyoutItem
+        Title="Setting"
+        Icon="setting.png"
+        >
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:SettingPage}"
+            />
+    </FlyoutItem>
+    <!-- Pofile s-->
+    <FlyoutItem
+        Title="Profile"
+        Icon="user.png"
+        >
+        <ShellContent
+            ContentTemplate="{DataTemplate pages:ProfilePage}" 
+            />
+    </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <VerticalStackLayout Padding="0,10,0,20">
+            <BoxView HeightRequest="1" 
+                     BackgroundColor="White" 
+                     Opacity="0.1" 
+                     Margin="15,0,15,10"/>
+
+            <Grid Style="{StaticResource FlyoutItemLayoutStyle}"
+                  HeightRequest="45"
+                  ColumnDefinitions="50, *">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LogoutCommand}" />
+                </Grid.GestureRecognizers>
+
+                <Image Source="logout.png" 
+                       HeightRequest="18" 
+                       WidthRequest="18" 
+                       HorizontalOptions="Center"/>
+
+                <Label Grid.Column="1" 
+                       Text="Sign Out" 
+                       TextColor="White" 
+                       FontSize="13" 
+                       VerticalOptions="Center"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Shell.FlyoutFooter>
+
+</Shell>

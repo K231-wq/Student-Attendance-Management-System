@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Student_Attendance_Management_System.View.pages.HomePage"
+             xmlns:model="clr-namespace:Student_Attendance_Management_System.Model"
+             xmlns:responseModel="clr-namespace:Student_Attendance_Management_System.Model.Responses"
+             xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
+             x:DataType="viewModel:HomeViewModel"
+             >
+    <ContentPage.Resources>
+        <Color x:Key="BrandBlue">#4E73DF</Color>
+        <Color x:Key="BrandGreen">#1CC88A</Color>
+        <Color x:Key="BrandRed">#E74A3B</Color>
+        <Color x:Key="BrandYellow">#F6C23E</Color>
+        <Color x:Key="LightText">#858796</Color>
+        <Color x:Key="SidebarBg">#FFFFFF</Color>
+        <Color x:Key="BorderLight">#E3E6F0</Color>
+
+        <Style TargetType="Border" x:Key="MetricCardStyle">
+            <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
+            <Setter Property="StrokeThickness" Value="0"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="HeightRequest" Value="100"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05"/>
+            </Setter>
+        </Style>
+
+        <Style TargetType="RadioButton" x:Key="StatusRadioStyle">
+            <Setter Property="ControlTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border StrokeShape="RoundRectangle 5" 
+                                Stroke="{StaticResource BorderLight}"
+                                StrokeThickness="1"
+                                BackgroundColor="White"
+                                HeightRequest="35"
+                                WidthRequest="40"
+                                Padding="0">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup x:Name="CheckedStates">
+                                        <VisualState x:Name="Checked">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{Binding Source={RelativeSource TemplatedParent}, Path=BorderColor}" />
+                                                <Setter TargetName="ContentLabel" Property="Label.TextColor" Value="White" />
+                                                <Setter Property="StrokeThickness" Value="0" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Unchecked" />
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                            <Label x:Name="ContentLabel" 
+                                   Text="{TemplateBinding Content}" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center" 
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource LightText}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <Grid ColumnDefinitions="*" BackgroundColor="{StaticResource Navy1}">
+        <Grid 
+            Grid.Column="1" 
+            RowDefinitions="Auto, *" 
+            Padding="30" 
+            IsVisible="{Binding IsNotBusy}">
+
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, *" Margin="0,0,0,20">
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Label Text="{Binding ForamttedDate}" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="White"/>
+                    <Label Text="Attendance Dashboard" 
+                           FontSize="12" 
+                           TextColor="{StaticResource Gray200}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" 
+                           Spacing="10" 
+                           HorizontalOptions="End" 
+                           VerticalOptions="Center">
+
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" 
+                       Spacing="5" 
+                       Padding="0,5">
+                        <Ellipse WidthRequest="10" 
+                                 HeightRequest="10" 
+                                 Fill="{Binding StatusColor}" 
+                                 VerticalOptions="Center"/>
+
+                        <Label Text="{Binding ConnectionStatus}" 
+                               FontSize="Caption" 
+                               TextColor="{Binding StatusColor}" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <Border StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="White" HeightRequest="45" Padding="15,0">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Label Text="Total:" TextColor="{StaticResource BrandBlue}" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalStudents}" TextColor="{StaticResource DarkText}" FontAttributes="Bold" FontSize="16"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="White" HeightRequest="45" Padding="15,0">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Label Text="P:" TextColor="{StaticResource BrandGreen}" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalPresentStudents}" TextColor="{StaticResource DarkText}" FontAttributes="Bold" FontSize="16"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="White" HeightRequest="45" Padding="15,0">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Label Text="A:" TextColor="{StaticResource BrandRed}" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalAbsentStudents}" TextColor="{StaticResource DarkText}" FontAttributes="Bold" FontSize="16"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="White" HeightRequest="45" Padding="10,0">
+                        <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
+                                    TextColor="{StaticResource DarkText}"
+                                    FontSize="14"
+                                    Format="d"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center"/>
+                    </Border>
+
+                    <Button Text="Today" 
+                            Command="{Binding SetTodayCommand}"
+                            HeightRequest="45"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            BackgroundColor="{StaticResource BrandBlue}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            Padding="15,0"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <Border Grid.Row="1" StrokeShape="RoundRectangle 10" StrokeThickness="0" Stroke="White">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05"/>
+                </Border.Shadow>
+
+                <Grid RowDefinitions="Auto, Auto, *">
+                    <Grid Grid.Row="0" 
+                          ColumnDefinitions="*, Auto, Auto"
+                          Padding="20" 
+                          ColumnSpacing="15">
+                        <Border Stroke="{StaticResource BorderLight}" 
+                                StrokeShape="RoundRectangle 8" 
+                                HeightRequest="40" 
+                                Padding="10,0">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <Label Text="🔍" 
+                                       VerticalOptions="Center" 
+                                       TextColor="{StaticResource LightText}"
+                                       FontSize="20"/>
+                                <SearchBar Grid.Column="1" 
+                                           Placeholder="Search student..." 
+                                           BackgroundColor="Transparent" 
+                                           Text="{Binding SearchText}"
+                                           CancelButtonColor="{StaticResource DarkText}"
+                                           />
+                            </Grid>
+                        </Border>
+
+                        <Picker Grid.Column="1" 
+                                Title="Filter Status" 
+                                TextColor="White"
+                                WidthRequest="150"
+                                ItemsSource="{Binding FilterOptions}"
+                                SelectedItem="{Binding SelectedFilterOption}"
+                                BackgroundColor="{StaticResource Gray900}"
+                                >
+                        </Picker>
+
+                        <Button Grid.Column="2" Text="Mark Rest Present ✓" BackgroundColor="{StaticResource BrandBlue}" TextColor="White" CornerRadius="8" HeightRequest="40"/>
+                    </Grid>
+
+                    <Border Grid.Row="1"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8"
+                            >
+                        <Grid
+                              ColumnDefinitions="60, 2*, 2.5*, 1.5*, 1*, Auto" 
+                              Padding="20,10"
+                              ColumnSpacing="5"
+                              BackgroundColor="{StaticResource SidebarDark}"
+                              >
+
+                            <BoxView Color="Transparent" />
+
+                            <Label Grid.Column="1" Text="ID" FontAttributes="Bold" TextColor="{StaticResource Gray200}" VerticalOptions="Center"/>
+                            <Label Grid.Column="2" Text="Name" FontAttributes="Bold" TextColor="{StaticResource Gray200}" VerticalOptions="Center"/>
+                            <Label Grid.Column="3" Text="Status" FontAttributes="Bold" TextColor="{StaticResource Gray200}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Grid.Column="4" Text="Platform" FontAttributes="Bold" TextColor="{StaticResource Gray200}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Label Grid.Column="5" Text="Action" FontAttributes="Bold" TextColor="{StaticResource Gray200}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+
+                    <CollectionView Grid.Row="2" 
+                            ItemsSource="{Binding Students}"
+                            SelectionMode="None"
+                            Margin="0,5,0,0"
+                            IsVisible="{Binding CollectionChanged}"
+                            BackgroundColor="{StaticResource Gray950}">
+
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="responseModel:StudentInfo">
+                                <SwipeView Threshold="20">
+
+                                    <SwipeView.RightItems>
+                                        <SwipeItems Mode="Reveal">
+                                            <SwipeItem Text="Mark Manual"
+                                                       BackgroundColor="{StaticResource BrandGreen}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomeViewModel}}, Path=MarkManualAttendanceCommand}"
+                                                       CommandParameter="{Binding .}" />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid Padding="4,8,4,0">
+                                        <Border StrokeShape="RoundRectangle 20"
+                                                    StrokeThickness="0"
+                                                    BackgroundColor="#1E1E24" 
+                                                    Padding="10">
+                                            <Grid ColumnDefinitions="60, 2*, 2.5*, 1.5*, 1*, Auto"
+                                                  ColumnSpacing="5">
+
+                                                <Border Grid.Column="0"
+                                                            StrokeShape="RoundRectangle 20"
+                                                            HeightRequest="40"
+                                                            WidthRequest="40"
+                                                            StrokeThickness="0"
+                                                            HorizontalOptions="Start"
+                                                            VerticalOptions="Center">
+                                                    <Image Source="{Binding FullProfileImageUrl}"
+                                                               Aspect="AspectFill"
+                                                               HeightRequest="40"
+                                                               WidthRequest="40"/>
+                                                </Border>
+
+                                                <Label Grid.Column="1" 
+                                                            Text="{Binding id}" 
+                                                            FontSize="13" 
+                                                            TextColor="White"
+                                                            FontAttributes="Bold"
+                                                            LineBreakMode="TailTruncation"
+                                                            VerticalOptions="Center"/>
+
+                                                <Label Grid.Column="2" 
+                                                           Text="{Binding name}" 
+                                                           FontSize="13" 
+                                                           TextColor="{StaticResource Gray200}"
+                                                           FontAttributes="Bold"
+                                                           LineBreakMode="TailTruncation"
+                                                           VerticalOptions="Center"/>
+
+                                                <Border Grid.Column="3"
+                                                            StrokeShape="RoundRectangle 5"
+                                                            StrokeThickness="0"
+                                                            HorizontalOptions="Center"
+                                                            VerticalOptions="Center"
+                                                            Padding="10,4"
+                                                            MinimumWidthRequest="70">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="BackgroundColor" Value="{StaticResource BrandRed}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger TargetType="Border" Binding="{Binding IsPresent}" Value="True">
+                                                                    <Setter Property="BackgroundColor" Value="{StaticResource BrandGreen}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+
+                                                    <Label FontSize="11" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center">
+                                                        <Label.Style>
+                                                            <Style TargetType="Label">
+                                                                <Setter Property="Text" Value="Absent" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger TargetType="Label" Binding="{Binding IsPresent}" Value="True">
+                                                                        <Setter Property="Text" Value="Present" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
+                                                    </Label>
+                                                </Border>
+
+                                                <Label Grid.Column="4" 
+                                                           Text="{Binding platform}" 
+                                                           FontSize="11" 
+                                                           TextColor="{StaticResource White}" 
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"/>
+
+                                                <Button Grid.Column="5"
+                                                            Text="⋮"
+                                                            TextColor="White"
+                                                            BackgroundColor="Transparent"
+                                                            FontSize="20"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomeViewModel}}, Path=ShowActionSheetCommand}"
+                                                            CommandParameter="{Binding .}"
+                                                            />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </SwipeView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <VerticalStackLayout IsVisible="{Binding IsBusy}" Spacing="15" Padding="20">
+                        <BoxView Style="{StaticResource SkeletonCardStyle}" />
+                        <BoxView Style="{StaticResource SkeletonCardStyle}" />
+                        <BoxView Style="{StaticResource SkeletonCardStyle}" />
+                        <BoxView Style="{StaticResource SkeletonCardStyle}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+        <ActivityIndicator Color="{StaticResource PrimaryBlue}" 
+                            IsRunning="{Binding IsBusy}" 
+                            IsVisible="{Binding IsBusy}" 
+                            ZIndex="1"
+                            Grid.RowSpan="3"
+                            HorizontalOptions="Fill" 
+                            VerticalOptions="Center" 
+                           />
+    </Grid>
+
+</ContentPage>
