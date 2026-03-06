@@ -90,6 +90,3 @@ ViewModel handles logic, and backend service validates credentials.
 - For full code and architecture exploration, visit the [GitHub repository](https://github.com/K231-wq/Student-Attendance-Management-System).
 - Some code and details may not be included here due to search limitations. To view more results, use GitHub's code search.
 
----
-
-> **Note:** This README is based on available code search results and project structure; for the most up-to-date information, explore the repository directly or consult documentation and backend code (if present).
