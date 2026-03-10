@@ -49,7 +49,7 @@ namespace Student_Attendance_Management_System.Model.Responses
         [JsonIgnore]
         public string FullProfileImageUrl =>
             string.IsNullOrEmpty(profileImage) ? "default_user.png" :
-            profileImage.StartsWith("http") ? profileImage : $"{ApiConfig.BaseUrl}{profileImage}";
+            profileImage.StartsWith("http") ? "default_user.png" : $"{ApiConfig.BaseUrl}{profileImage}";
     }
 
     public class ResponseTeacher

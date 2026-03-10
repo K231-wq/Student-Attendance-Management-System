@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:Student_Attendance_Management_System.ViewModel"
              xmlns:converters="clr-namespace:Student_Attendance_Management_System.Converters"
              x:DataType="viewModel:RegisterViewModel"
-             BackgroundColor="White"
+             BackgroundColor="#355872"
              >
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -53,7 +53,7 @@
         <Grid Grid.Column="{OnIdiom Phone=0, Tablet=1, Desktop=1}">
             <Grid IsVisible="{OnIdiom Phone=False, Tablet=True, Desktop=True}">
                 <Path
-                    Fill="{StaticResource PrimaryBlue}"
+                    Fill="#355872"
                     Data="M 40 -1 L 1000 0 L 1000 1000 L 0 1000 Z" />
             </Grid>
             <ScrollView>

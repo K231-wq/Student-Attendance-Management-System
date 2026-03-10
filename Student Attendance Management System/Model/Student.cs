@@ -24,7 +24,7 @@ namespace Student_Attendance_Management_System.Model
                     return "default_user.png"; // Fallback local image
 
                 if (profileImage.StartsWith("http"))
-                    return profileImage;
+                    return "default_user.png";
 
                 return $"{ApiConfig.BaseUrl}{profileImage}";
             }

@@ -14,7 +14,7 @@
         <Grid Grid.Row="0" 
               ColumnDefinitions="Auto, *, Auto, Auto" 
               Padding="10,0" 
-              BackgroundColor="{StaticResource PrimaryBlue}" 
+              BackgroundColor="#50589C" 
               VerticalOptions="Fill">
 
             <!--Total Student-->
@@ -102,7 +102,9 @@
                                         />
                                 </Frame.GestureRecognizers>
                                 <Grid ColumnDefinitions="110, *, 80, 100, 80" 
-                                      Padding="0">
+                                      Padding="0"
+                                      BackgroundColor="#213448"
+                                      >
                                     <!-- Student's Image -->
                                     <Image Aspect="AspectFill" 
                                            Source="{Binding FullProfileImageUrl}" 

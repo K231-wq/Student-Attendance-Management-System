@@ -64,7 +64,7 @@
             </Setter>
         </Style>
     </ContentPage.Resources>
-    <Grid ColumnDefinitions="*" BackgroundColor="{StaticResource Navy1}">
+    <Grid ColumnDefinitions="*" BackgroundColor="#213448">
         <Grid 
             Grid.Column="1" 
             RowDefinitions="Auto, *" 

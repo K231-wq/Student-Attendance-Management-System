@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*'}" BackgroundColor="{StaticResource Navy1}">
+    <Grid ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*'}" BackgroundColor="#2D3C59">
         <ScrollView>
             <VerticalStackLayout Padding="40" Spacing="4" VerticalOptions="Center">
 
